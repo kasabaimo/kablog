@@ -1,7 +1,7 @@
 # Jekyll configuration
 
-name: Xixia
-description: Welcome to Xixia！
+name: K.Asaba
+description: Welcome to Kentaro Asaba's homepage！
 
 # url is currently only used only for the RSS feed in feed.xml
 baseurl: '/kablog'
