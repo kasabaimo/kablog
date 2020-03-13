@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Xixia</title>
-		<description>Welcome to Xixia！</description>
-		<link>http://localhost:4000/jekyll-xixia</link>
-		<atom:link href="http://localhost:4000/jekyll-xixia/feed.xml" rel="self" type="application/rss+xml" />
+		<title>K.Asaba</title>
+		<description>Welcome to Kentaro Asaba's homepage！</description>
+		<link>http://localhost:4000/kablog</link>
+		<atom:link href="http://localhost:4000/kablog/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
 				<title>How to get beautiful ASCII pics and ASCII text</title>
@@ -103,8 +103,8 @@ Elephant.&lt;/p&gt;
 
 </description>
 				<pubDate>Sat, 30 Sep 2017 00:00:00 +0900</pubDate>
-				<link>http://localhost:4000/jekyll-xixia/programmer/2017/09/30/sonoi.html</link>
-				<guid isPermaLink="true">http://localhost:4000/jekyll-xixia/programmer/2017/09/30/sonoi.html</guid>
+				<link>http://localhost:4000/kablog/programmer/2017/09/30/sonoi.html</link>
+				<guid isPermaLink="true">http://localhost:4000/kablog/programmer/2017/09/30/sonoi.html</guid>
 			</item>
 		
 			<item>
@@ -129,12 +129,12 @@ and you can do the same thing for any other sections added to the sidebar.&lt;/p
 the latest changes. Pull requests are encouraged and accepted!&lt;/p&gt;
 
 &lt;h1 id=&quot;preview&quot;&gt;Preview&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;/jekyll-xixia//assets/images/preview.png&quot; alt=&quot;Xixia&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/kablog//assets/images/preview.png&quot; alt=&quot;Xixia&quot; /&gt;&lt;/p&gt;
 
 &lt;h1 id=&quot;license&quot;&gt;License&lt;/h1&gt;
 
 &lt;p&gt;The content of this theme is distributed and licensed under a
-&lt;img src=&quot;/jekyll-xixia/assets/images/cc_by_88x31.png&quot; alt=&quot;License Badge&quot; /&gt;
+&lt;img src=&quot;/kablog/assets/images/cc_by_88x31.png&quot; alt=&quot;License Badge&quot; /&gt;
 &lt;a href=&quot;https://creativecommons.org/licenses/by/4.0/legalcode&quot;&gt;Creative Commons Attribution 4.0 License&lt;/a&gt;&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;This license lets others distribute, remix, tweak, and build upon your work,
@@ -159,8 +159,8 @@ so I get credit for the original design. Beyond that, have at it!&lt;/p&gt;
 
 </description>
 				<pubDate>Tue, 19 Sep 2017 00:00:00 +0900</pubDate>
-				<link>http://localhost:4000/jekyll-xixia/other/2017/09/19/README.html</link>
-				<guid isPermaLink="true">http://localhost:4000/jekyll-xixia/other/2017/09/19/README.html</guid>
+				<link>http://localhost:4000/kablog/other/2017/09/19/README.html</link>
+				<guid isPermaLink="true">http://localhost:4000/kablog/other/2017/09/19/README.html</guid>
 			</item>
 		
 			<item>
@@ -260,8 +260,8 @@ Elephant.&lt;/p&gt;
 
 </description>
 				<pubDate>Fri, 15 Sep 2017 00:00:00 +0900</pubDate>
-				<link>http://localhost:4000/jekyll-xixia/programmer/2017/09/15/ascii-art-and-text.html</link>
-				<guid isPermaLink="true">http://localhost:4000/jekyll-xixia/programmer/2017/09/15/ascii-art-and-text.html</guid>
+				<link>http://localhost:4000/kablog/programmer/2017/09/15/ascii-art-and-text.html</link>
+				<guid isPermaLink="true">http://localhost:4000/kablog/programmer/2017/09/15/ascii-art-and-text.html</guid>
 			</item>
 		
 			<item>
@@ -282,8 +282,8 @@ Elephant.&lt;/p&gt;
 
 </description>
 				<pubDate>Tue, 05 Sep 2017 15:10:51 +0900</pubDate>
-				<link>http://localhost:4000/jekyll-xixia/jekyll/2017/09/05/welcome-to-jekyll.html</link>
-				<guid isPermaLink="true">http://localhost:4000/jekyll-xixia/jekyll/2017/09/05/welcome-to-jekyll.html</guid>
+				<link>http://localhost:4000/kablog/jekyll/2017/09/05/welcome-to-jekyll.html</link>
+				<guid isPermaLink="true">http://localhost:4000/kablog/jekyll/2017/09/05/welcome-to-jekyll.html</guid>
 			</item>
 		
 			<item>
@@ -347,8 +347,8 @@ these terms, please let a &lt;a href=&quot;https://github.com/orgs/jekyll/teams/
 &lt;p&gt;See the &lt;a href=&quot;https://github.com/jekyll/jekyll/blob/master/LICENSE&quot;&gt;LICENSE&lt;/a&gt; file.&lt;/p&gt;
 </description>
 				<pubDate>Tue, 05 Sep 2017 15:10:51 +0900</pubDate>
-				<link>http://localhost:4000/jekyll-xixia/jekyll/2017/09/05/reademe-of-jekyll.html</link>
-				<guid isPermaLink="true">http://localhost:4000/jekyll-xixia/jekyll/2017/09/05/reademe-of-jekyll.html</guid>
+				<link>http://localhost:4000/kablog/jekyll/2017/09/05/reademe-of-jekyll.html</link>
+				<guid isPermaLink="true">http://localhost:4000/kablog/jekyll/2017/09/05/reademe-of-jekyll.html</guid>
 			</item>
 		
 			<item>
@@ -412,8 +412,8 @@ these terms, please let a &lt;a href=&quot;https://github.com/orgs/jekyll/teams/
 &lt;p&gt;See the &lt;a href=&quot;https://github.com/jekyll/jekyll/blob/master/LICENSE&quot;&gt;LICENSE&lt;/a&gt; file.&lt;/p&gt;
 </description>
 				<pubDate>Tue, 05 Sep 2017 15:10:51 +0900</pubDate>
-				<link>http://localhost:4000/jekyll-xixia/jekyll/2017/09/05/another-copy-of-the-reademe-of-jekyll.html</link>
-				<guid isPermaLink="true">http://localhost:4000/jekyll-xixia/jekyll/2017/09/05/another-copy-of-the-reademe-of-jekyll.html</guid>
+				<link>http://localhost:4000/kablog/jekyll/2017/09/05/another-copy-of-the-reademe-of-jekyll.html</link>
+				<guid isPermaLink="true">http://localhost:4000/kablog/jekyll/2017/09/05/another-copy-of-the-reademe-of-jekyll.html</guid>
 			</item>
 		
 	</channel>
