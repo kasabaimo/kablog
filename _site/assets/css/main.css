@@ -64,6 +64,10 @@ body { background-image: url(/jekyll-xixia/assets/images/canvas_bg.jpg); padding
 
 .navbar-custom .icon-bar { background-color: #28323C; }
 
+.mbtablestyle { border-collapse: collapse; }
+
+.mbtablestyle > table, .mbtablestyle td, .mbtablestyle th { border: 1px solid black; }
+
 /** http://github.com/mojombo/jekyll MIT License */
 .highlight { background: #ffffff; }
 

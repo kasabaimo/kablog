@@ -143,3 +143,13 @@ body {
 .navbar-custom .icon-bar {
     background-color: $nav-bar-icon-bar;
 }
+
+
+
+.mbtablestyle {
+    border-collapse: collapse;
+
+> table, td, th {
+    border: 1px solid black;
+    }
+}
