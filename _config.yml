@@ -1,7 +1,7 @@
 # Jekyll configuration
 
 name: K.Asaba
-description: Welcome to Kentaro Asaba's homepage！
+description: Kentaro Asaba's personal homepage
 
 # url is currently only used only for the RSS feed in feed.xml
 baseurl: '/kablog'
@@ -21,7 +21,7 @@ date_format:
 # Language
 lan: "en" 
 
-paginate: 10
+paginate: 20
 
 highlighter: rouge
 markdown: kramdown
