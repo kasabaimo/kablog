@@ -90,3 +90,8 @@ layout: default
     <a class="btn btn-default" href="{{ site.baseurl}}{{ page.previous.url }}" class="previous">{{ trans.older_post }}</a>
     {% endif %}
 </div>
+
+{%if page.bokeh  %}
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.js"></script>
+{% endif  %}
