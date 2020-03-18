@@ -29,3 +29,6 @@ gems: ['jekyll-paginate']
 plugins: [jekyll-paginate]
 
 exclude: ['README.md', 'LICENSE', "*.bak"]
+
+include:
+  - assets
