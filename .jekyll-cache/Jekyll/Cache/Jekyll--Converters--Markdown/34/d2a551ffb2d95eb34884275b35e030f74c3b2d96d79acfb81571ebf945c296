@@ -1,0 +1,87 @@
+I"6)<h1 id="objective">Objective</h1>
+<p>By using P-Splines (Penalized Smoothing Splines) to draw a smooth line on two dimensional scatter plot on R.</p>
+
+<h1 id="code-examples">Code Examples</h1>
+
+<h3 id="sample-code-from-package-pspline">Sample code from <a href="https://cran.r-project.org/web/packages/pspline/pspline.pdf">Package ‘pspline’</a></h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span><span class="w">
+</span><span class="n">attach</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">dist</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"data(cars) &amp; smoothing splines"</span><span class="p">)</span><span class="w">  </span><span class="c1"># scatter plot the original data</span><span class="w">
+</span><span class="n">lines</span><span class="p">(</span><span class="n">sm.spline</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">dist</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="o">=</span><span class="m">10</span><span class="p">),</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"red"</span><span class="p">,</span><span class="w"> </span><span class="p">)</span><span class="w">  </span><span class="c1"># draw the P-Spline curve with degree of freedom 10</span><span class="w">
+</span><span class="n">lines</span><span class="p">(</span><span class="n">sm.spline</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">dist</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"green"</span><span class="p">)</span><span class="w">  </span><span class="c1"># draw the P-Spline curve with degree fo freedom 100</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="s2">"topleft"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'df=10'</span><span class="p">,</span><span class="w"> </span><span class="s1">'df=100'</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="w"> </span><span class="s2">"green"</span><span class="p">),</span><span class="w">  </span><span class="n">lty</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/kablog//assets/images/pspline/p1.png" alt="Xixia" /></p>
+
+<p>We confirm that the larger <code class="highlighter-rouge">df</code> (=degree of freedom) leads to more zigzagged line (bias-variance tradeoff).</p>
+
+<h3 id="artificial-data">Artificial Data</h3>
+
+<div align="center">
+$$y = \sin (x) - 1.5\cos (x/2 - 5) + 0.3 \sin (x * 10)$$
+</div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">50</span><span class="p">)</span><span class="o">/</span><span class="m">3</span><span class="w">
+</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">cos</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="m">2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="o">*</span><span class="m">1.5</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">0.3</span><span class="o">*</span><span class="nf">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="m">10</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w">
+</span><span class="n">lines</span><span class="p">(</span><span class="n">sm.spline</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="o">=</span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"red"</span><span class="p">)</span><span class="w">
+</span><span class="n">lines</span><span class="p">(</span><span class="n">sm.spline</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="o">=</span><span class="m">10</span><span class="p">),</span><span class="w"> </span><span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"green"</span><span class="p">)</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="s2">"bottomleft"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'df=5'</span><span class="p">,</span><span class="w"> </span><span class="s1">'df=10'</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="w"> </span><span class="s2">"green"</span><span class="p">),</span><span class="w">  </span><span class="n">lty</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/kablog//assets/images/pspline/p2.png" alt="Xixia" /></p>
+
+<h1 id="application-on-real-data">Application on Real Data</h1>
+<p>株式の取引間隔のデータに適応すれば、以下のように日中季節性を取り出すことも出来る
+For example, we can apply P-Spline on stock transaction data to extract <strong>intraday seasonality</strong></p>
+
+<p>X-axis: time stamps transaction occurred.  <br />
+Y-axis: trade interval from the last trade
+ <img src="/kablog//assets/images/pspline/p3.png" alt="Xixia" /></p>
+
+<p>We can confirm the intraday seasonality with P-Spline (shorter transaction interval right after market opens, and right before market closes.)</p>
+
+<h1 id="mathematical-background">Mathematical Background</h1>
+<p>Now, consider</p>
+<div align="center">
+$$y _ j =x\left(t _ j \right)+\varepsilon _ j , \;  j=1, \ldots, n.$$
+</div>
+<p>Here, <script type="math/tex">x\left(t _ j \right)</script> is the spline’s prediction, <script type="math/tex">y _ j</script> are the actual observed points.</p>
+
+<p>Now, how we decide <script type="math/tex">x\left(t _ j \right)</script> ?</p>
+
+<p>The first method comes to our mind is probably <em>least square method</em>.</p>
+<div align="center">
+$$ S S E(x | y)=\sum_ j \left(y_ j -x\left(t_ j \right)\right) ^ 2$$
+</div>
+
+<p>P-Spline utilizes this idea of least square method.</p>
+
+<p>Now, we consider what kind of line we want to draw.</p>
+
+<p><img src="/kablog//assets/images/pspline/p4.png" alt="Xixia" /></p>
+
+<p>If we have these ↑ points, the line we want to draw would look like this↓</p>
+
+<p><img src="/kablog//assets/images/pspline/p5.png" alt="Xixia" /></p>
+
+<p>We can also draw a line like this:</p>
+
+<p><img src="/kablog//assets/images/pspline/6.png" alt="Xixia" />
+But this↑ is not what we wanted. We <strong>penalize</strong> this zigzag in the <em>P</em>-Spline.</p>
+
+<p>We define <em>penalty</em> as:</p>
+<div align="center">
+[tex: \sum _ {i=1} ^ N \left(y-\alpha-f(x ; \beta) +\sum _ {p=1} ^ P f\left(z _ {i p} \right)  \right) ^ 2 +\lambda \int \left(f ^ {\prime \prime} (x) \right) ^ 2 dx]
+</div>
+
+<h1 id="参考文献リンク">参考文献・リンク</h1>
+<ul>
+  <li>[https://en.wikipedia.org/wiki/Smoothing_spline#cite_note-EilersMarx1996-13:title]</li>
+  <li><a href="https://link.springer.com/article/10.3758/BF03200573">論文：Spline smoothing with model-based penalties</a></li>
+  <li><a href="https://csm.lshtm.ac.uk/wp-content/uploads/sites/6/2016/04/Antonio-Gasparrini-29-05-2015.pdf">スライド：Smoothing with penalized splines</a></li>
+</ul>
+
+:ET
