@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Draw a Smooth Line on R Plot using P-Spline"
+title:  "P-Spline Implementation on R"
 categories: Data
 tags: [R, Statistics]
 author: K.Asaba
