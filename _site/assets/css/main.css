@@ -248,5 +248,6 @@ body { background-image: url(/kablog/assets/images/canvas_bg.jpg); padding-top: 
 .highlight .il { color: #009999; }
 
 /* Literal.Number.Integer.Long */
+img { max-width: 100%; border: 1px solid #eee; }
 
 /*# sourceMappingURL=main.css.map */
