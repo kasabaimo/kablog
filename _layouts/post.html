@@ -1,97 +1,93 @@
 ---
 layout: default
 ---
-{% assign trans = site.data.values[site.lan] %}
-<div class="well article">
-        <h2><a href="{{ site.baseurl}}{{ page.url }}">{{ page.title }}</a></h2>
-        <span class="post-date">
-            {% assign date_format = site.date_format.title %}
-            {{ page.date | date: date_format }}
-        </span>
-        <hr style="border-top:1px solid #28323C;"/>
-    {% if site.comments and page.comments %}
-        {% if site.disqus != '' %}
-        <p class="author"><a href="#disqus_thread" data-disqus-identifier="{{ page.url | slugify }}">Comments</a></p>
-        {% elsif site.isso != '' %}
-        <p class="author"><a href="{{ site.baseurl }}{{ page.url }}{{ site.isso_suffix }}#isso-thread">Comments</a></p>
-        {% endif %}
-    {% endif %}
-    <div class="post-content">
+
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+
+    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+    <p class="post-meta">
+      {%- assign date_format = site.date_format | default: "%b %-d, %Y" -%}
+      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {{ page.date | date: date_format }}
+      </time>
+      {%- if page.last_modified_at -%}
+        ~ 
+        {%- assign mdate = page.last_modified_at | date_to_xmlschema -%}
+        <time class="dt-modified" datetime="{{ mdate }}" itemprop="dateModified">
+          {{ mdate | date: date_format }}
+        </time>
+      {%- endif -%}
+      {%- if page.author -%}
+        • {% for author in page.author %}
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">{{ author }}</span></span>
+            {%- if forloop.last == false %}, {% endif -%}
+        {% endfor %}
+      {%- endif -%}
+    </p>
+
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
-    <hr style="border-top:1px solid #28323C;"/>
+  </div>
 
-    <!-- tags and categories under post -->
-    {% unless page.categories == empty %}
-    <ul class="list-unstyled list-inline">
-      <li><i class="icon-folder-open"></i></li>
-      {% assign categories_list = page.categories %}
-      {% if categories_list.first[0] == null %}
-        {% for category in categories_list %} 
-            <li class="icon-style"><a href="{{ site.baseurl }}/categories.html">
-                {{ category | join: "/" }} <span>({{ site.categories[category].size }})</span>
-                {% unless forloop.last %},{% endunless %}
-            </a></li>
-        {% endfor %}
-      {% else %}
-        {% for category in categories_list %} 
-            <li class="icon-style"><a href="{{ site.baseurl }}/categories.html">
-                {{ category[0] | join: "/" }} <span>/{{ category[1].size }})</span>
-            </a></li>
-        {% endfor %}
-      {% endif %}
-    </ul>
-    {% endunless %}  
-
-    {% unless page.tags == empty %}
-    <ul class="list-unstyled list-inline">
-      <li><i class="icon-tags"></i></li>
-      {% assign tags_list = page.tags %}
-      {% if tags_list.first[0] == null %}
-        {% for tag in tags_list %} 
-            <li class="icon-style">
-                <a href="{{ site.baseurl }}/tags.html">
-                {{ tag }} <span>({{ site.tags[tag].size }})</span>
-                {% unless forloop.last %},{% endunless %}
-                </a>
+  <footer class="post-footer">
+    {% if page.categories.size > 0 %}
+      <div class="post-meta">
+        <i class="fas fa-folder"></i>
+        <ul class="post-taxonomies post-categories">
+          {% assign categories = page.categories | sort %}
+          {% for category in categories %}
+            <li class="post-category">
+              {% assign slugified_category = category | slugify %}
+              <a href="{{ '/categories/#:category' | replace: ':category', slugified_category | relative_url }}">{{ category }}</a>
             </li>
-        {% endfor %}
-      {% else %}
-        {% for tag in tags_list %} 
-            <li class="icon-style">
-                <a href="{{ site.baseurl }}/tags.html">
-                    {{ tag[0] }} <span>({{ tag[1].size }})</span>
-                    {% unless forloop.last %},{% endunless %}
-                </a>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if page.tags.size > 0 %}
+      <div class="post-meta">
+        <i class="fas fa-tags"></i>
+        <ul class="post-taxonomies post-tags">
+          {% assign tags = page.tags | sort %}
+          {% for tag in tags %}
+            <li class="post-tag">
+              {% assign slugified_tag = tag | slugify %}
+              <a href="{{ '/tags/#:tag' | replace: ':tag', slugified_tag | relative_url }}">{{ slugified_tag }}</a>
             </li>
-           
-        {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <nav class="post-pagination" role="navigation">
+      {% if page.previous %}
+        <a class="post-previous" href="{{ page.previous.url | relative_url }}">
+          <h4 class="post-pagination-label">Prev</h4>
+          <span class="post-pagination-title">
+            <i class="fas fa-arrow-left"></i> {{ page.previous.title | markdownify | strip_html }}
+          </span>
+        </a>
       {% endif %}
-      {% assign tags_list = nil %}
-    </ul>
-    {% endunless %}  
 
-    </div>
-    {% if page.comments %}
-        {% if site.disqus != '' %}
-    <div id="disqus_thread">
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    </div>
-        {% elsif site.isso != '' %}
-        <section id="isso-thread"></section>
-        {% endif %}
-    {% endif %}
-</div>
-<div class="pagination">
-    {% if page.next %}
-    <a class="btn btn-default" href="{{ site.baseurl}}{{ page.next.url }}" class="next">{{ trans.newer_post }}</a>
-    {% endif %}
-    {% if page.previous %}
-    <a class="btn btn-default" href="{{ site.baseurl}}{{ page.previous.url }}" class="previous">{{ trans.older_post }}</a>
-    {% endif %}
-</div>
+      {% if page.next %}
+        <a class="post-next" href="{{ page.next.url | relative_url }}">
+          <h4 class="post-pagination-label">Next</h4>
+          <span class="post-pagination-title">
+            {{ page.next.title | markdownify | strip_html }} <i class="fas fa-arrow-right"></i>
+          </span>
+        </a>
+      {% endif %}
+    </nav>
+  </footer>
 
-{%if page.bokeh  %}
-<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css" type="text/css" />
-<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.js"></script>
-{% endif  %}
+  {% if page.comments != false and jekyll.environment == "production" and site.disqus %}
+    {% include disqus.html %}
+  {% endif %}
+  
+</article>
