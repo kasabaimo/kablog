@@ -10,24 +10,25 @@
 <title>Hamilton | A minimal and beautiful Jekyll theme best for writing and note-taking.</title>
 <meta name="generator" content="Jekyll v3.9.1" />
 <meta property="og:title" content="Hamilton" />
-<meta name="author" content="Shangzhi Huang" />
+<meta name="author" content="K.Asaba" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="A minimal and beautiful Jekyll theme best for writing and note-taking." />
 <meta property="og:description" content="A minimal and beautiful Jekyll theme best for writing and note-taking." />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
+<link rel="canonical" href="http://localhost:4000/kablog/" />
+<meta property="og:url" content="http://localhost:4000/kablog/" />
 <meta property="og:site_name" content="Hamilton" />
+<link rel="next" href="http://localhost:4000/kablog/page2" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Hamilton" />
 <meta name="twitter:site" content="@ngzhio" />
-<meta name="twitter:creator" content="@Shangzhi Huang" />
+<meta name="twitter:creator" content="@K.Asaba" />
 <meta name="google-site-verification" content="u4WXQl0Eu66rsQo2kRdCNx" />
 <script type="application/ld+json">
-{"url":"http://localhost:4000/","author":{"@type":"Person","name":"Shangzhi Huang"},"@type":"WebSite","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/logo.png"},"name":"Shangzhi Huang"},"headline":"Hamilton","sameAs":["https://twitter.com/ngzhio","https://www.facebook.com/ngzhio","https://github.com/ngzhio"],"description":"A minimal and beautiful Jekyll theme best for writing and note-taking.","name":"Shangzhi Huang","@context":"https://schema.org"}</script>
+{"url":"http://localhost:4000/kablog/","author":{"@type":"Person","name":"K.Asaba"},"@type":"WebSite","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/kablog/logo.png"},"name":"K.Asaba"},"headline":"Hamilton","sameAs":["https://twitter.com/ngzhio","https://www.facebook.com/ngzhio","https://github.com/ngzhio"],"description":"A minimal and beautiful Jekyll theme best for writing and note-taking.","name":"Shangzhi Huang","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Hamilton" />
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/kablog/feed.xml" title="Hamilton" />
 
 
 
@@ -36,8 +37,8 @@
 <!-- Google Fonts -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open%20Sans|Roboto|Roboto%20Slab|Inconsolata|Dancing%20Script|Noto%20Sans%20SC|Noto%20Sans%20TC|Noto%20Serif%20SC|Noto%20Serif%20TC|Ma%20Shan%20Zheng">
 
-<link rel="stylesheet" href="/assets/css/main.css">
-<link rel="stylesheet" href="/assets/css/skin.css">
+<link rel="stylesheet" href="/kablog/assets/css/main.css">
+<link rel="stylesheet" href="/kablog/assets/css/skin.css">
 
 <!-- Begin selecting skin -->
 
@@ -45,13 +46,13 @@
     const hour = (new Date()).getHours();
     let filename = "";
     if (hour >= 5 && hour < 7) {
-      filename = "/assets/css/skin-sunrise.css";
+      filename = "/kablog/assets/css/skin-sunrise.css";
     } else if (hour >= 7 && hour < 17) {
-      filename = "/assets/css/skin-daylight.css";
+      filename = "/kablog/assets/css/skin-daylight.css";
     } else if (hour >= 17 && hour < 19) {
-      filename = "/assets/css/skin-sunset.css";
+      filename = "/kablog/assets/css/skin-sunset.css";
     } else {
-      filename = "/assets/css/skin-midnight.css";
+      filename = "/kablog/assets/css/skin-midnight.css";
     }
     const elem = document.createElement("link");
     elem.setAttribute("rel", "stylesheet");
@@ -86,7 +87,7 @@
   <a class="site-sidebar-button" onclick="clickSidebarButton()"><i class="far fa-user"></i>
   </a>
 
-  <a class="site-title" rel="author" href="/">Hamilton</a>
+  <a class="site-title" rel="author" href="/kablog/">Hamilton</a>
 
   
     <nav class="site-nav">
@@ -100,19 +101,19 @@
       </label>
 
       <ul class="trigger">
-              <li><a class="" href="/about/">About</a></li>
+              <li><a class="" href="/kablog/about/">About</a></li>
             
-              <li><a class="" href="/years/">Years</a></li>
+              <li><a class="" href="/kablog/years/">Years</a></li>
             
-              <li><a class="" href="/categories/">Categories</a></li>
+              <li><a class="" href="/kablog/categories/">Categories</a></li>
             
-              <li><a class="" href="/tags/">Tags</a></li>
+              <li><a class="" href="/kablog/tags/">Tags</a></li>
             
               <li class="dropdown" href="#">
                 <a href="javascript:void(0)" class="dropbtn">More</a>
                 <div class="dropdown-content">
-                    <a class="" href="/faq/">FAQ</a>
-                    <a class="" href="/docs/">Docs</a>
+                    <a class="" href="/kablog/faq/">FAQ</a>
+                    <a class="" href="/kablog/docs/">Docs</a>
                 </div>
               </li>
             </ul>
@@ -125,38 +126,27 @@
       <div class="site-body wrapper">
         <aside class="site-sidebar" id="site-sidebar">
           
-            <div class="sidebar-section"><img src="/logo.png" class="author-avatar u-photo align-center" alt="Shangzhi Huang">
+            <div class="sidebar-section"><img src="/kablog/assets/images/logo.jpg" class="author-avatar u-photo align-center" alt="K.Asaba">
   </div>
 
 <div class="sidebar-section">
   <ul class="contact-list">
     <li>
         <i class="sidebar-icon fas fa-at"></i>
-        <span class="contact-info p-name">Shangzhi Huang</span>
+        <span class="contact-info p-name">K.Asaba</span>
       </li>
-    <li>
-        <i class="sidebar-icon fas fa-envelope"></i>
-        <a class="contact-info u-email" href="mailto:ngzhio@gmail.com">ngzhio@gmail.com</a>
-      </li>
+    
     
   </ul>
 </div>
 
 <div class="sidebar-section feed-subscribe">
-  <a href="/feed.xml">
+  <a href="/kablog/feed.xml">
     <i class="sidebar-icon fas fa-rss"></i><span>Subscribe</span>
   </a>
 </div>
 
-<div class="sidebar-section">
-    <ul class="social-icons">
-      <li>
-          <a class="social-icon" href="https://twitter.com/ngzhio"><i class="fab fa-twitter fa-2x" title="Twitter"></i></a>
-        </li><li>
-          <a class="social-icon" href="https://github.com/ngzhio/jekyll-theme-hamilton"><i class="fab fa-github fa-2x" title="GitHub"></i></a>
-        </li>
-    </ul>
-  </div>
+
 
           
         </aside>
@@ -167,7 +157,69 @@
 
   <ul class="post-list"><li>
         <h2>
-          <a href="/2016/05/20/welcome-to-jekyll.html">
+          <a href="/kablog/data/2020/04/19/Cryptocurrency-Network-Analysis.html">
+            Cryptocurrency Network Analysis
+          </a>
+        </h2>
+        <p class="post-meta">
+          <time class="dt-published" datetime="2020-04-19T00:00:00+09:00" itemprop="datePublished">
+            Apr 19, 2020
+          </time></p><div class="post-excerpt">
+
+
+
+</div></li><li>
+        <h2>
+          <a href="/kablog/data/2020/04/03/Draw-a-Smooth-Line-with-P-Spline-on-R.html">
+            P-Spline Implementation on R
+          </a>
+        </h2>
+        <p class="post-meta">
+          <time class="dt-published" datetime="2020-04-03T00:00:00+09:00" itemprop="datePublished">
+            Apr 3, 2020
+          </time></p><div class="post-excerpt">Objective
+By using P-Splines (Penalized Smoothing Splines) to draw a smooth line on two dimensional scatter plot on R.
+
+</div></li><li>
+        <h2>
+          <a href="/kablog/finance/2020/03/31/FT-2020.html">
+            FT 2020
+          </a>
+        </h2>
+        <p class="post-meta">
+          <time class="dt-published" datetime="2020-03-31T00:00:00+09:00" itemprop="datePublished">
+            Mar 31, 2020
+          </time></p><div class="post-excerpt">Week 1
+
+</div></li><li>
+        <h2>
+          <a href="/kablog/data/2020/03/27/Hawkes-Process.html">
+            Hawkes Process Simulation and Application
+          </a>
+        </h2>
+        <p class="post-meta">
+          <time class="dt-published" datetime="2020-03-27T00:00:00+09:00" itemprop="datePublished">
+            Mar 27, 2020
+          </time></p><div class="post-excerpt">
+
+
+
+</div></li><li>
+        <h2>
+          <a href="/kablog/data/2020/03/21/Ploblems-of-Linear-Regression.html">
+            Problems of Linear Regression
+          </a>
+        </h2>
+        <p class="post-meta">
+          <time class="dt-published" datetime="2020-03-21T00:00:00+09:00" itemprop="datePublished">
+            Mar 21, 2020
+          </time></p><div class="post-excerpt">
+
+
+
+</div></li><li>
+        <h2>
+          <a href="/kablog/2016/05/20/welcome-to-jekyll.html">
             Welcome To Jekyll
           </a>
         </h2>
@@ -178,7 +230,7 @@
 
 </div></li><li>
         <h2>
-          <a href="/junk/2016/05/20/this-post-demonstrates-post-content-styles.html">
+          <a href="/kablog/junk/2016/05/20/this-post-demonstrates-post-content-styles.html">
             This post demonstrates post content styles
           </a>
         </h2>
@@ -189,7 +241,7 @@
 
 </div></li><li>
         <h2>
-          <a href="/misc/2016/05/20/super-long-article.html">
+          <a href="/kablog/misc/2016/05/20/super-long-article.html">
             Some articles are just so long they deserve a really long title to see if things will break well
           </a>
         </h2>
@@ -200,7 +252,7 @@
 
 </div></li><li>
         <h2>
-          <a href="/2016/05/20/my-example-post.html">
+          <a href="/kablog/2016/05/20/my-example-post.html">
             My Example Post
           </a>
         </h2>
@@ -211,7 +263,7 @@
 
 </div></li><li>
         <h2>
-          <a href="/misc/2016/05/19/super-short-article.html">
+          <a href="/kablog/misc/2016/05/19/super-short-article.html">
             Some articles are just so short that we have to make the footer stick
           </a>
         </h2>
@@ -219,17 +271,6 @@
           <time class="dt-published" datetime="2016-05-19T00:00:00+09:00" itemprop="datePublished">
             May 19, 2016
           </time></p><div class="post-excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</div></li><li>
-        <h2>
-          <a href="/2016/01/11/task-item-list.html">
-            Task Item List
-          </a>
-        </h2>
-        <p class="post-meta">
-          <time class="dt-published" datetime="2016-01-11T00:00:00+09:00" itemprop="datePublished">
-            Jan 11, 2016
-          </time></p><div class="post-excerpt">This post tests the style of a task item list.
-
 </div></li></ul>
 
     
@@ -237,7 +278,7 @@
         <ul class="pagination">
           <li><div class="pager-edge">•</div></li>
           <li><div class="current-page">1</div></li>
-          <li><div class="pager-edge">•</div></li>
+          <li><a href="/kablog/page2" class="next-page">2</a></li>
         </ul>
       </div></div>
 
@@ -250,7 +291,7 @@
       
       
       
-      <p>Copyright © 2016&nbsp;-&nbsp;2021 Shangzhi Huang; All rights reserved.</p>
+      <p>Copyright © 2016&nbsp;-&nbsp;2021 K.Asaba; All rights reserved.</p>
       
     </div>
     <p>
