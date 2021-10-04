@@ -1,4 +1,4 @@
-title: Hamilton
+title: K.Asaba
 description: A minimal and beautiful Jekyll theme best for writing and note-taking.
 author: K.Asaba
 avatar: assets/images/logo.jpg
@@ -15,6 +15,8 @@ plugins:
   - jekyll-paginate
 
 paginate: 10
+
+htmlwidgets: TRUE
 
 # Uncomment the below line and set the tracking ID for enabling Google Analytics
 # 
