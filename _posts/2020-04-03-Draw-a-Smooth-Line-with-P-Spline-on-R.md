@@ -6,6 +6,7 @@ tags: [R, Statistics]
 author: K.Asaba
 description: Use Penalized Smoothing Splines to draw a smooth line on two dimensional scatter plot on R
 ---
+
 # Objective
 By using P-Splines (Penalized Smoothing Splines) to draw a smooth line on two dimensional scatter plot on R.
 

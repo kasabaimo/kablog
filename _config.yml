@@ -1,56 +1,42 @@
-title: K.Asaba
-description: A minimal and beautiful Jekyll theme best for writing and note-taking.
-author: K.Asaba
-avatar: assets/images/logo.jpg
-# email: ngzhio@gmail.com
+theme: plainwhite
+title:       "K.Asaba"
+# email:       nannevannoord@gmail.com
+# author:      K.Asaba
+url:         "http://kasabaimo.github.io"
+# description: "Nanne's website"
+show_excerpts: false
 
-# url is currently only used only for the RSS feed in feed.xml
 baseurl: '/kablog'
-url: 'https://kasabaimo.github.io/'
 
-plugins:
-  - jekyll-seo-tag
-  - jekyll-feed
-  - jekyll-sitemap
-  - jekyll-paginate
+plainwhite:
+  name: K.Asaba
+  tagline: Sales Trader and Data Scientist at Société Générale
+  date_format: "%b %-d, %Y"
+  sitemap: true 
+  search: false 
+  dark_mode: true
+  portfolio_image: "assets/images/logo.jpg" 
+  html_lang: "en" 
+  condensed_mobile:
+    #- home
+    - page
+    - post
+  # generate social links in footer
+  social_links:
+    # twitter: nannevn
+    github:  kasabaimo
+    linkedIn: in/kentaro-asaba
+    # scholar: wFDJzDkAAAAJ
+  navigation: 
+    - title: Home
+      url: "/"
+    - title: About
+      url: "/about"
+    # - title: Contact
+    #   url: "mailto:n.j.e.vannoord@uva.nl"
 
-paginate: 10
-
-htmlwidgets: TRUE
-
-# Uncomment the below line and set the tracking ID for enabling Google Analytics
-# 
-# google_analytics: 
-
-# Uncomment the below lines and set the Disqus shortname for enabling Disqus
-# 
-# disqus:
-
-# Jekyll
-# ======
-exclude:
-  - scripts/
-  - README.md
-  - jekyll-theme-hamilton.gemspec
-  - Gemfile
-  - Gemfile.lock
-  - node_modules
-  - vendor/bundle/
-  - vendor/cache/
-  - vendor/gems/
-  - vendor/ruby/
-
-# Jekyll SEO Tag (Optional)
-# =========================
-# twitter:
-#   username: ngzhio
-#   card: summary
-logo: logo.png
-# social:
-#   name: Shangzhi Huang
-#   links:
-#     - https://twitter.com/ngzhio
-#     - https://www.facebook.com/ngzhio
-#     - https://github.com/ngzhio
-# google_site_verification: u4WXQl0Eu66rsQo2kRdCNx
-lang: en
+# Build settings
+markdown:     kramdown
+permalink:    pretty
+sass:
+        sass_dir: _sass

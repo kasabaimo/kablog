@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/kablog/assets/css/style.css">
+<title>When Should We NOT Run Linear Regression?</title>
+
+<script type="text/javascript" src="/kablog/assets/js/darkmode.js"></script>
+
+<link rel="stylesheet" href="/kablog/assets/css/academicons.min.css"/>
+</head><body>
+  <main class="container">
+    <section class="about">
+      <div class="about-header condensed">
+      <div class="about-title">
+      <a href="/kablog/">
+        
+        <img src="/kablog/assets/images/logo.jpg" alt="K.Asaba" />
+        
+      </a>
+      <h2 id="title">
+        <a href="/kablog/">K.Asaba</a>
+      </h2>
+      </div><p class="tagline">Sales Trader and Data Scientist at Société Générale</p></div>
+      
+      <ul class="social about-footer condensed"><a href="https://github.com/kasabaimo" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/kentaro-asaba" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a></ul><nav class="navigation about-footer condensed">
+        <ul>
+          
+          <li>
+            <a href="/">Home</a>
+          </li>
+          
+          <li>
+            <a href="/about">About</a>
+          </li>
+          
+        </ul>
+      </nav><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </section>
+    <section class="content">
+      <div class="post-container">
+  <a class="post-link" href="/kablog/statistics/2020/10/04/When-Linear-Regression-Fails/">
+    <h2 class="post-title">When Should We NOT Run Linear Regression?</h2>
+  </a>
+  <div class="post-meta">
+    <div class="post-date"><i class="icon-calendar"></i>Oct 4, 2020</div><ul class="post-categories"><li>Statistics</li></ul></div>
+  <div class="post">
+    <h2 id="trdr">TR;DR</h2>
+<p>Linear regression gives you incorrect results when there exists</p>
+<ol>
+  <li>Omitted variables bias</li>
+  <li>Bad control</li>
+  <li>Attenuation Bias
+This article explains them with Python examples.</li>
+</ol>
+
+<p>(There are many other cases that gives you wrong regression results. This article only gives you three of them)</p>
+
+<h2 id="omitted-variable-biases">Omitted Variable Biases</h2>
+
+<p>Assume that you want to estimate <strong>how much additional one year of education increases one’s salary on average</strong>. <br />
+Your data has two variables: “years of education” and “salary”. You decided to regress them as:</p>
+
+<div align="center">
+$$\text{salary}_i = \alpha + \beta \times \text{educyear}_i + \varepsilon_i$$
+</div>
+
+<p>Although you only have “educyear” in your variable, you realized that there exists an <strong>omitted variable</strong> “IQ” which affects obth “years of education” and “salary”.<br />
+While you don’t have “IQ” data, it seems people with high IQ tend to receive more education and higher salary.</p>
+
+<p><img src="/kablog//assets/images/liner_reg/omitted_variable_bias.png" alt="OVB" /></p>
+
+<p>In this case, running a regression with just “educyear” will over/under-estimate educyear’s effect on salary.</p>
+
+<p>Let’s see a Python example with a simulated data.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="n">sm</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="n">go</span>
+
+<span class="c1"># generate data
+</span><span class="n">n</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">x_iq</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># IQ is centered at 100 and have sd=15
+</span><span class="n">x_educyear</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="nb">round</span><span class="p">(</span><span class="n">x_iq</span><span class="o">*</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># Assume higher IQ leads to higher educyear
+</span><span class="n">y_salary</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="mf">0.7</span><span class="o">*</span><span class="n">x_iq</span> <span class="o">+</span> <span class="mf">1.1</span><span class="o">*</span><span class="n">x_educyear</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># plot data
+</span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="p">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_iq</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">x_educyear</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">y_salary</span><span class="p">,</span>
+                                   <span class="n">mode</span><span class="o">=</span><span class="s">'markers'</span><span class="p">)])</span>
+<span class="n">fig</span><span class="p">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">scene</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">xaxis_title</span><span class="o">=</span><span class="s">'IQ'</span><span class="p">,</span>
+                               <span class="n">yaxis_title</span><span class="o">=</span><span class="s">'EducYear'</span><span class="p">,</span>
+                               <span class="n">zaxis_title</span><span class="o">=</span><span class="s">'Salary'</span><span class="p">),</span>
+                  <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">),)</span>
+<span class="n">fig</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<iframe width="400" height="300" frameborder="0" scrolling="no" src="//plotly.com/~kasabaimo/21.embed"></iframe>
+
+<p>Now estimate the coefficients.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X_modelA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">x_educyear</span><span class="p">))</span>  <span class="c1"># add y-intercept
+</span>
+<span class="n">ols</span> <span class="o">=</span> <span class="n">sm</span><span class="p">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y_salary</span><span class="p">,</span> <span class="n">X_modelA</span><span class="p">)</span>
+<span class="n">ols_result</span> <span class="o">=</span> <span class="n">ols</span><span class="p">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ols_result</span><span class="p">.</span><span class="n">summary</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.462
+Model:                            OLS   Adj. R-squared:                  0.460
+Method:                 Least Squares   F-statistic:                     255.7
+Date:                Tue, 05 Oct 2021   Prob (F-statistic):           5.52e-42
+Time:                        12:18:32   Log-Likelihood:                -1180.1
+No. Observations:                 300   AIC:                             2364.
+Df Residuals:                     298   BIC:                             2372.
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const        131.7647      6.902     19.090      0.000     118.181     145.348
+x1             6.2147      0.389     15.990      0.000       5.450       6.980
+==============================================================================
+Omnibus:                        1.788   Durbin-Watson:                   1.784
+Prob(Omnibus):                  0.409   Jarque-Bera (JB):                1.559
+Skew:                          -0.081   Prob(JB):                        0.459
+Kurtosis:                       3.314   Cond. No.                         172.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</code></pre></div></div>
+
+<p>The OLS regression result shows coefficient of 6.2147, although the true coefficient is 1.1.</p>
+
+<p>Just in case, let’s test if we can estimate coefficients correctly when two variables are included.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X_modelB</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">x_educyear</span><span class="p">,</span> <span class="n">x_iq</span><span class="p">))</span>
+<span class="n">ols</span> <span class="o">=</span> <span class="n">sm</span><span class="p">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y_salary</span><span class="p">,</span> <span class="n">X_modelB</span><span class="p">)</span>
+<span class="n">ols_result</span> <span class="o">=</span> <span class="n">ols</span><span class="p">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ols_result</span><span class="p">.</span><span class="n">summary</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.678
+Model:                            OLS   Adj. R-squared:                  0.676
+Method:                 Least Squares   F-statistic:                     313.1
+Date:                Tue, 05 Oct 2021   Prob (F-statistic):           7.17e-74
+Time:                        13:12:51   Log-Likelihood:                -1102.9
+No. Observations:                 300   AIC:                             2212.
+Df Residuals:                     297   BIC:                             2223.
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const        144.9187      5.426     26.710      0.000     134.241     155.596
+x1             0.9455      0.479      1.974      0.049       0.003       1.888
+x2             0.7926      0.056     14.138      0.000       0.682       0.903
+==============================================================================
+Omnibus:                        0.131   Durbin-Watson:                   1.939
+Prob(Omnibus):                  0.936   Jarque-Bera (JB):                0.027
+Skew:                           0.007   Prob(JB):                        0.987
+Kurtosis:                       3.044   Cond. No.                     1.02e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 1.02e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
+</code></pre></div></div>
+
+<p>For educyear, estimated=0.9455 vs true=1.1.<br />
+For iq, estimated=0.7926 vs true=0.7.<br />
+We can say that estimation is successful in this case.</p>
+
+<p>To sum up, we need to always make sure we are not missing variables that affects both X and Y.</p>
+
+<p>[Note]
+When we realized that there are omitted variable biases but we can’t collect missing variable, use <em>Instrument Variable</em> to obtain true coefficients.</p>
+
+<h2 id="bad-control">Bad Control</h2>
+
+<p>In <strong>Omitted Variable Biases</strong>, we got a wrong result by NOT having the important variable.<br />
+In <strong>Bad Control</strong>, we get a wrong result by <strong>including unnecessary variables</strong>.</p>
+
+<p>Assume again that you want to estimate the effect of “years of education” on “salary”.<br />
+You decided to regress “salary” with “years of education” and “number of pencils used in his/her life”.<br />
+Here, “number of pencils used in his/her life” is affected by “years of education” but has nothing to do with “salary”, as shown in the below graph.</p>
+
+<p><img src="/kablog//assets/images/liner_reg/bad_control.png" alt="BadControl" /></p>
+
+<p>In this case, we should not include the irrelevant variable “number of pencils used” in the regression. What if we included in the regression model? Let’s see what will happen with Python example.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># generate data
+</span><span class="n">n</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">x_educyear</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">y_salary</span> <span class="o">=</span> <span class="mi">150</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">x_educyear</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># x_book isn't there
+</span><span class="n">x_book</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">x_educyear</span> <span class="o">+</span> <span class="n">y_salary</span><span class="o">*</span><span class="mf">0.6</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># visualization
+</span><span class="n">fig_2</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="p">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_educyear</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">x_book</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">y_salary</span><span class="p">,</span>
+                                   <span class="n">mode</span><span class="o">=</span><span class="s">'markers'</span><span class="p">)])</span>
+<span class="n">fig_2</span><span class="p">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig_2</span><span class="p">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">scene</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">xaxis_title</span><span class="o">=</span><span class="s">'Educyear'</span><span class="p">,</span>
+                                 <span class="n">yaxis_title</span><span class="o">=</span><span class="s">'Books'</span><span class="p">,</span>
+                                 <span class="n">zaxis_title</span><span class="o">=</span><span class="s">'Salary'</span><span class="p">),</span>
+                    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">),)</span>
+<span class="n">fig_2</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<iframe width="400" height="300" frameborder="0" scrolling="no" src="//plotly.com/~kasabaimo/23.embed"></iframe>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># OLS with full data
+</span><span class="n">X_badcontrol</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">x_educyear</span><span class="p">,</span> <span class="n">x_book</span><span class="p">))</span>  <span class="c1"># add y-intercept
+</span><span class="n">ols_bc</span> <span class="o">=</span> <span class="n">sm</span><span class="p">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y_salary</span><span class="p">,</span> <span class="n">X_badcontrol</span><span class="p">)</span>
+<span class="n">ols_bc_result</span> <span class="o">=</span> <span class="n">ols_bc</span><span class="p">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ols_bc_result</span><span class="p">.</span><span class="n">summary</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.864
+Model:                            OLS   Adj. R-squared:                  0.863
+Method:                 Least Squares   F-statistic:                     940.7
+Date:                Tue, 05 Oct 2021   Prob (F-statistic):          3.08e-129
+Time:                        16:59:08   Log-Likelihood:                -1070.8
+No. Observations:                 300   AIC:                             2148.
+Df Residuals:                     297   BIC:                             2159.
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const        101.1492      4.557     22.194      0.000      92.180     110.118
+x1             0.4052      0.663      0.611      0.541      -0.899       1.709
+x2             0.5220      0.044     11.982      0.000       0.436       0.608
+==============================================================================
+Omnibus:                        0.776   Durbin-Watson:                   1.932
+Prob(Omnibus):                  0.678   Jarque-Bera (JB):                0.526
+Skew:                           0.054   Prob(JB):                        0.769
+Kurtosis:                       3.175   Cond. No.                     2.25e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.25e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
+</code></pre></div></div>
+
+<p>Although the true coefficient for x_educyear is 8, the OLS shows the coefficient of 0.4052.</p>
+
+<p>Lesson: do not always include everything you have on your data.</p>
+
+<p>You can check what are bad and good controls with <a href="https://ftp.cs.ucla.edu/pub/stat_ser/r493.pdf">this paper</a></p>
+
+<h2 id="references">References</h2>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Smoothing_spline#cite_note-EilersMarx1996-13">Wikipedia</a></li>
+  <li><a href="https://link.springer.com/article/10.3758/BF03200573">Spline smoothing with model-based penalties</a></li>
+  <li><a href="https://csm.lshtm.ac.uk/wp-content/uploads/sites/6/2016/04/Antonio-Gasparrini-29-05-2015.pdf">Smoothing with penalized splines</a></li>
+</ul>
+
+
+  </div></div>
+
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    </section>
+    <footer class="condensed">
+      <ul class="social about-footer condensed"><a href="https://github.com/kasabaimo" target="_blank">
+          <li>
+            <i class="icon-github-circled"></i>
+          </li>
+        </a><a href="https://www.linkedin.com/in/kentaro-asaba" target="_blank">
+          <li>
+            <i class="icon-linkedin-squared"></i>
+          </li>
+        </a></ul><nav class="navigation about-footer condensed">
+        <ul>
+          
+          <li>
+            <a href="/">Home</a>
+          </li>
+          
+          <li>
+            <a href="/about">About</a>
+          </li>
+          
+        </ul>
+      </nav><div class="about-footer condensed">
+        <p>Dark Mode
+          <i class="icon-moon"></i>
+          <label class="switch">
+            <input type="checkbox" class="dark-mode-toggle">
+            <span class="slider round" onclick="toggleDarkMode()"></span>
+          </label>
+        </p>
+      </div>
+    </footer>
+  </main>
+  
+  <script type="text/javascript" src="/kablog/assets/js/darkmode.js"></script>
+  
+</body>
+
+</html>
