@@ -29,9 +29,9 @@ plainwhite:
     # scholar: wFDJzDkAAAAJ
   navigation: 
     - title: Home
-      url: "/"
+      url: "/kablog/"
     - title: About
-      url: "/about"
+      url: "/kablog/about"
     # - title: Contact
     #   url: "mailto:n.j.e.vannoord@uva.nl"
 

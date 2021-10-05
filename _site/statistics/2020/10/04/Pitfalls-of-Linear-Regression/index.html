@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
 <link rel="stylesheet" href="/kablog/assets/css/style.css">
-<title>When Should We NOT Run Linear Regression?</title>
+<title>Pitfalls of Linear Regression</title>
 
 <script type="text/javascript" src="/kablog/assets/js/darkmode.js"></script>
 
@@ -38,11 +38,11 @@
         <ul>
           
           <li>
-            <a href="/">Home</a>
+            <a href="/kablog/">Home</a>
           </li>
           
           <li>
-            <a href="/about">About</a>
+            <a href="/kablog/about">About</a>
           </li>
           
         </ul>
@@ -58,8 +58,8 @@
     </section>
     <section class="content">
       <div class="post-container">
-  <a class="post-link" href="/kablog/statistics/2020/10/04/When-Linear-Regression-Fails/">
-    <h2 class="post-title">When Should We NOT Run Linear Regression?</h2>
+  <a class="post-link" href="/kablog/statistics/2020/10/04/Pitfalls-of-Linear-Regression/">
+    <h2 class="post-title">Pitfalls of Linear Regression</h2>
   </a>
   <div class="post-meta">
     <div class="post-date"><i class="icon-calendar"></i>Oct 4, 2020</div><ul class="post-categories"><li>Statistics</li></ul></div>
@@ -244,47 +244,108 @@ Here, “number of pencils used in his/her life” is affected by “years of ed
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                            OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                      y   R-squared:                       0.864
-Model:                            OLS   Adj. R-squared:                  0.863
-Method:                 Least Squares   F-statistic:                     940.7
-Date:                Tue, 05 Oct 2021   Prob (F-statistic):          3.08e-129
-Time:                        16:59:08   Log-Likelihood:                -1070.8
-No. Observations:                 300   AIC:                             2148.
-Df Residuals:                     297   BIC:                             2159.
+Dep. Variable:                      y   R-squared:                       0.860
+Model:                            OLS   Adj. R-squared:                  0.859
+Method:                 Least Squares   F-statistic:                     909.8
+Date:                Tue, 05 Oct 2021   Prob (F-statistic):          2.21e-127
+Time:                        22:45:35   Log-Likelihood:                -1081.3
+No. Observations:                 300   AIC:                             2169.
+Df Residuals:                     297   BIC:                             2180.
 Df Model:                           2                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P&gt;|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const        101.1492      4.557     22.194      0.000      92.180     110.118
-x1             0.4052      0.663      0.611      0.541      -0.899       1.709
-x2             0.5220      0.044     11.982      0.000       0.436       0.608
+const        110.8141      4.389     25.249      0.000     102.177     119.451
+x1             1.3708      0.684      2.006      0.046       0.026       2.716
+x2             0.4441      0.044     10.111      0.000       0.358       0.530
 ==============================================================================
-Omnibus:                        0.776   Durbin-Watson:                   1.932
-Prob(Omnibus):                  0.678   Jarque-Bera (JB):                0.526
-Skew:                           0.054   Prob(JB):                        0.769
-Kurtosis:                       3.175   Cond. No.                     2.25e+03
+Omnibus:                        1.719   Durbin-Watson:                   1.893
+Prob(Omnibus):                  0.423   Jarque-Bera (JB):                1.503
+Skew:                          -0.019   Prob(JB):                        0.472
+Kurtosis:                       2.655   Cond. No.                     2.06e+03
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The condition number is large, 2.25e+03. This might indicate that there are
+[2] The condition number is large, 2.06e+03. This might indicate that there are
 strong multicollinearity or other numerical problems.
 </code></pre></div></div>
 
-<p>Although the true coefficient for x_educyear is 8, the OLS shows the coefficient of 0.4052.</p>
+<p>Although the true coefficient for x_educyear is 8, the OLS shows the coefficient of 1.3708.</p>
 
 <p>Lesson: do not always include everything you have on your data.</p>
 
-<p>You can check what are bad and good controls with <a href="https://ftp.cs.ucla.edu/pub/stat_ser/r493.pdf">this paper</a></p>
+<p>You can check what are bad and good controls with <a href="https://ftp.cs.ucla.edu/pub/stat_ser/r493.pdf">this paper</a>.</p>
+
+<h2 id="attenuation-bias">Attenuation Bias</h2>
+
+<p>Attenuation bias occures when there exists an observation error on <em>x</em>.</p>
+
+<p>Assume that y is generated like below.</p>
+
+<div align="center">
+$$y_i = 100 + 2x_{i} + \varepsilon_i$$
+$$\varepsilon_i \sim \mathcal{N}(0, 10)$$
+</div>
+
+<p>Assume also that we can only observe x-tilde, which is same as true x plus error:</p>
+
+<div align="center">
+$$\tilde{x_{i}} = x_i + \nu,$$
+$$\nu \sim \mathcal{N}(0, 20)$$
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">x1</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">x1</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">'o'</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s">'none'</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s">'blue'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'x-true'</span><span class="p">)</span>
+
+<span class="c1"># Add the bias term
+</span><span class="n">X_modelA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">x1</span><span class="p">))</span>
+
+<span class="n">ols</span> <span class="o">=</span> <span class="n">sm</span><span class="p">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_modelA</span><span class="p">)</span>
+<span class="n">ols_result</span> <span class="o">=</span> <span class="n">ols</span><span class="p">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">ols_result</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_modelA</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'blue'</span><span class="p">)</span>
+
+
+<span class="c1">###############################
+</span><span class="n">nu</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="n">x1_tilda</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">nu</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1_tilda</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">'o'</span><span class="p">,</span> <span class="n">facecolors</span><span class="o">=</span><span class="s">'none'</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s">'red'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">'x-tilda'</span><span class="p">)</span>
+
+<span class="c1"># Add the bias term
+</span><span class="n">X_modelA</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">np</span><span class="p">.</span><span class="n">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">x1_tilda</span><span class="p">))</span>
+
+<span class="n">ols</span> <span class="o">=</span> <span class="n">sm</span><span class="p">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_modelA</span><span class="p">)</span>
+<span class="n">ols_result</span> <span class="o">=</span> <span class="n">ols</span><span class="p">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x1_tilda</span><span class="p">,</span> <span class="n">ols_result</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_modelA</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">'red'</span><span class="p">)</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">shrink</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">headwidth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> 
+                                <span class="n">headlength</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">connectionstyle</span><span class="o">=</span><span class="s">'arc3'</span><span class="p">,</span>
+                                <span class="n">facecolor</span><span class="o">=</span><span class="s">'lightgray'</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">'lightgray'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">moto</span><span class="p">,</span> <span class="n">ato</span><span class="p">,</span> <span class="n">yy</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x1_tilda</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">annotate</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">moto</span><span class="p">,</span> <span class="n">yy</span><span class="p">),</span> <span class="n">xytext</span> <span class="o">=</span> <span class="p">(</span><span class="n">ato</span><span class="p">,</span> <span class="n">yy</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s">"black"</span><span class="p">,</span> <span class="n">arrowprops</span> <span class="o">=</span> <span class="n">arr</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/kablog//assets/images/liner_reg/attenuation.png" alt="attenuation" /></p>
+
+<p>You can confirm the regression with x-tilda resulted in smaller coefficient. This is also called as <a href="https://en.wikipedia.org/wiki/Regression_dilution#:~:text=Regression%20dilution%2C%20also%20known%20as,errors%20in%20the%20independent%20variable.">regression dilution</a>, the effect that biasing the regression coefficient towards zero.</p>
 
 <h2 id="references">References</h2>
 <ul>
-  <li><a href="https://en.wikipedia.org/wiki/Smoothing_spline#cite_note-EilersMarx1996-13">Wikipedia</a></li>
-  <li><a href="https://link.springer.com/article/10.3758/BF03200573">Spline smoothing with model-based penalties</a></li>
-  <li><a href="https://csm.lshtm.ac.uk/wp-content/uploads/sites/6/2016/04/Antonio-Gasparrini-29-05-2015.pdf">Smoothing with penalized splines</a></li>
+  <li>Angrist, Joshua D., and Jörn-Steffen Pischke. Mostly harmless econometrics. Princeton university press, 2008.</li>
 </ul>
-
 
   </div></div>
 
@@ -304,11 +365,11 @@ strong multicollinearity or other numerical problems.
         <ul>
           
           <li>
-            <a href="/">Home</a>
+            <a href="/kablog/">Home</a>
           </li>
           
           <li>
-            <a href="/about">About</a>
+            <a href="/kablog/about">About</a>
           </li>
           
         </ul>

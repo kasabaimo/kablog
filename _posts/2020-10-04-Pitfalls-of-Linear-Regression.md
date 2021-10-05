@@ -1,7 +1,7 @@
 ---
 layout: post
 toc: true
-title:  "When Should We NOT Run Linear Regression?"
+title:  "Pitfalls of Linear Regression"
 categories: Statistics
 tags: [python, statistics]
 author: K.Asaba
@@ -194,43 +194,104 @@ print(ols_bc_result.summary())
 ```
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                      y   R-squared:                       0.864
-Model:                            OLS   Adj. R-squared:                  0.863
-Method:                 Least Squares   F-statistic:                     940.7
-Date:                Tue, 05 Oct 2021   Prob (F-statistic):          3.08e-129
-Time:                        16:59:08   Log-Likelihood:                -1070.8
-No. Observations:                 300   AIC:                             2148.
-Df Residuals:                     297   BIC:                             2159.
+Dep. Variable:                      y   R-squared:                       0.860
+Model:                            OLS   Adj. R-squared:                  0.859
+Method:                 Least Squares   F-statistic:                     909.8
+Date:                Tue, 05 Oct 2021   Prob (F-statistic):          2.21e-127
+Time:                        22:45:35   Log-Likelihood:                -1081.3
+No. Observations:                 300   AIC:                             2169.
+Df Residuals:                     297   BIC:                             2180.
 Df Model:                           2                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-const        101.1492      4.557     22.194      0.000      92.180     110.118
-x1             0.4052      0.663      0.611      0.541      -0.899       1.709
-x2             0.5220      0.044     11.982      0.000       0.436       0.608
+const        110.8141      4.389     25.249      0.000     102.177     119.451
+x1             1.3708      0.684      2.006      0.046       0.026       2.716
+x2             0.4441      0.044     10.111      0.000       0.358       0.530
 ==============================================================================
-Omnibus:                        0.776   Durbin-Watson:                   1.932
-Prob(Omnibus):                  0.678   Jarque-Bera (JB):                0.526
-Skew:                           0.054   Prob(JB):                        0.769
-Kurtosis:                       3.175   Cond. No.                     2.25e+03
+Omnibus:                        1.719   Durbin-Watson:                   1.893
+Prob(Omnibus):                  0.423   Jarque-Bera (JB):                1.503
+Skew:                          -0.019   Prob(JB):                        0.472
+Kurtosis:                       2.655   Cond. No.                     2.06e+03
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The condition number is large, 2.25e+03. This might indicate that there are
+[2] The condition number is large, 2.06e+03. This might indicate that there are
 strong multicollinearity or other numerical problems.
 ```
 
-Although the true coefficient for x_educyear is 8, the OLS shows the coefficient of 0.4052.
+Although the true coefficient for x_educyear is 8, the OLS shows the coefficient of 1.3708.
 
 Lesson: do not always include everything you have on your data.
 
-You can check what are bad and good controls with [this paper](https://ftp.cs.ucla.edu/pub/stat_ser/r493.pdf)
+You can check what are bad and good controls with [this paper](https://ftp.cs.ucla.edu/pub/stat_ser/r493.pdf).
+
+## Attenuation Bias
+
+Attenuation bias occures when there exists an observation error on *x*.
+
+Assume that y is generated like below.
+
+<div align="center">
+$$y_i = 100 + 2x_{i} + \varepsilon_i$$
+$$\varepsilon_i \sim \mathcal{N}(0, 10)$$
+</div>
+
+Assume also that we can only observe x-tilde, which is same as true x plus error:
+
+<div align="center">
+$$\tilde{x_{i}} = x_i + \nu,$$
+$$\nu \sim \mathcal{N}(0, 20)$$
+</div>
+
+```python
+n = 20
+
+x1 = 100*np.random.rand(n)
+y = 100 + x1*2 + np.random.normal(0, 10, size=n)
+
+plt.figure(figsize=(10, 7))
+
+plt.scatter(x1, y, marker='o', facecolors='none', edgecolors='blue', label='x-true')
+
+# Add the bias term
+X_modelA = np.column_stack((np.repeat(1, n), x1))
+
+ols = sm.OLS(y, X_modelA)
+ols_result = ols.fit()
+
+plt.plot(x1, ols_result.predict(X_modelA), lw=1, color='blue')
+
+
+###############################
+nu = np.random.normal(0, 20, size=n)
+x1_tilda = x1 + nu
+plt.scatter(x1_tilda, y, marker='o', facecolors='none', edgecolors='red', label='x-tilda')
+
+# Add the bias term
+X_modelA = np.column_stack((np.repeat(1, n), x1_tilda))
+
+ols = sm.OLS(y, X_modelA)
+ols_result = ols.fit()
+
+plt.plot(x1_tilda, ols_result.predict(X_modelA), lw=1, color='red')
+
+arr = dict(shrink=0, width=0.1, headwidth=6, 
+                                headlength=10, connectionstyle='arc3',
+                                facecolor='lightgray', edgecolor='lightgray')
+for moto, ato, yy in zip(x1_tilda, x1, y):
+    plt.annotate('', xy = (moto, yy), xytext = (ato, yy), color = "black", arrowprops = arr)
+
+plt.legend(fontsize=15)
+    
+plt.show()
+```
+
+![attenuation]({{ site.baseurl }}//assets/images/liner_reg/attenuation.png)
+
+You can confirm the regression with x-tilda resulted in smaller coefficient. This is also called as [regression dilution](https://en.wikipedia.org/wiki/Regression_dilution#:~:text=Regression%20dilution%2C%20also%20known%20as,errors%20in%20the%20independent%20variable.), the effect that biasing the regression coefficient towards zero.
 
 ## References
-- [Wikipedia](https://en.wikipedia.org/wiki/Smoothing_spline#cite_note-EilersMarx1996-13)
-- [Spline smoothing with model-based penalties](https://link.springer.com/article/10.3758/BF03200573)
-- [Smoothing with penalized splines](https://csm.lshtm.ac.uk/wp-content/uploads/sites/6/2016/04/Antonio-Gasparrini-29-05-2015.pdf)
-
-
+- Angrist, Joshua D., and Jörn-Steffen Pischke. Mostly harmless econometrics. Princeton university press, 2008.
