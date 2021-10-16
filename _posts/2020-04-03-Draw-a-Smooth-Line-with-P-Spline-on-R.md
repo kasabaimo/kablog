@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "P-Spline Implementation on R"
-categories: Data
+categories: Statistics
 tags: [R, Statistics]
 author: K.Asaba
 description: Use Penalized Smoothing Splines to draw a smooth line on two dimensional scatter plot on R
