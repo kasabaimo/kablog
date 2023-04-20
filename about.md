@@ -4,7 +4,7 @@ layout: page
 
 ## About me
 
-I am a Sales Trader and Data Scientist at Société Générale Tokyo office.
+ Finance & Data Science.
 
 ## Skills
 
