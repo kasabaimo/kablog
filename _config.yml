@@ -1,15 +1,14 @@
 # theme: plainwhite
-title:       "K.Asaba"
-# email:       nannevannoord@gmail.com
-# author:      K.Asaba
+title:       "K.A"
+# author:      K.A
 url:         "http://kasabaimo.github.io"
-# description: "Nanne's website"
+# description: "ka website"
 show_excerpts: false
 
 baseurl: '/kablog'
 
 plainwhite:
-  name: K.Asaba
+  name: K.A
   tagline: Sales Trader and Data Scientist at Société Générale
   date_format: "%b %-d, %Y"
   sitemap: true 
