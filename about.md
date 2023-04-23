@@ -4,7 +4,7 @@ layout: page
 
 ## About me
 
- Finance & Data Science.
+ Finance and Data Science.
 
 ## Skills
 
